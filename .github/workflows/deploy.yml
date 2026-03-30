@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 19 # Vite/React modern stack
+          node-version: 20 # Vite/React modern stack requires node 20+
 
       - name: Install dependencies
         run: npm ci
