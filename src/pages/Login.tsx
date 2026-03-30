@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import { useLogin } from '@/hooks/useQueries'
 import { AtSign, Lock, Eye, EyeOff, ArrowRight, Shield, ShieldCheck } from 'lucide-react'
 
@@ -15,6 +15,7 @@ type LoginForm = z.infer<typeof loginSchema>
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const loginMutation = useLogin()
   const [showPassword, setShowPassword] = useState(false)
 
@@ -29,7 +30,10 @@ export default function Login() {
 
   const onSubmit = (data: LoginForm) => {
     loginMutation.mutate(data, {
-      onSuccess: () => navigate('/dashboard'),
+      onSuccess: () => {
+        const from = (location.state as any)?.from?.pathname || '/dashboard'
+        navigate(from, { replace: true })
+      },
     })
   }
 

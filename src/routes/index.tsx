@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router'
+import { Routes, Route, Navigate, useLocation } from 'react-router'
 import { useAuthStore } from '@/stores/authStore'
 import type { ReactNode } from 'react'
 
@@ -10,8 +10,10 @@ import Cards from '@/pages/Cards'
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const location = useLocation()
+
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
   return <>{children}</>
 }
@@ -27,6 +29,7 @@ function PublicRoute({ children }: { children: ReactNode }) {
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route
         path="/login"
         element={
@@ -46,7 +49,7 @@ export function AppRoutes() {
         <Route path="/transfer" element={<Transfer />} />
         <Route path="/cards" element={<Cards />} />
       </Route>
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   )
 }

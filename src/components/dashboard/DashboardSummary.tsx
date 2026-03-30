@@ -48,7 +48,7 @@ export function DashboardSummary() {
             )}
             <div className="flex items-center gap-3 mt-3 text-sm text-brand-light/70">
               <span className="flex items-center gap-1.5 bg-white/10 text-white rounded-md px-2 py-0.5 text-xs">
-                <CreditCard className="w-3 h-3" /> **** 4482
+                <CreditCard className="w-3 h-3" /> **** 8829
               </span>
               <span className="text-white/70">Próx. fatura: 24 Out</span>
             </div>
