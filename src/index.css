@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand teal / cyan */
+  --color-brand: #0891b2;
+  --color-brand-dark: #0e7490;
+  --color-brand-light: #22d3ee;
+  --color-brand-50: #ecfeff;
+  --color-brand-100: #cffafe;
+
+  /* Navy / sidebar */
+  --color-navy: #0f172a;
+  --color-navy-light: #1e293b;
+  --color-navy-600: #334155;
+
+  /* Backgrounds */
+  --color-background: #f0f4f8;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
+
+  /* Borders */
+  --color-border: #e2e8f0;
+  --color-border-hover: #cbd5e1;
+
+  /* Text */
+  --color-heading: #0f172a;
+  --color-body: #475569;
+  --color-muted: #94a3b8;
+
+  /* Semantic */
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-danger: #ef4444;
+  --color-danger-light: #fee2e2;
+  --color-warning: #f59e0b;
+
+  /* Gradient */
+  --color-gradient-start: #0f172a;
+  --color-gradient-end: #1e3a5f;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-body);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.badge-shopping {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.badge-income {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.badge-food {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.badge-transport {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.badge-health {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.badge-bills {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.badge-transfer {
+  background: #ccfbf1;
+  color: #0d9488;
+}
+
+/* Flip Card */
+.flip-card {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 0.75rem;
+}
+
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
