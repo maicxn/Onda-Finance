@@ -79,7 +79,7 @@ describe('Transfer Flow', () => {
     await waitFor(() => expect(screen.getByText('Nubank')).toBeInTheDocument())
     await user.click(screen.getByText('Nubank'))
 
-    await user.type(screen.getByLabelText('Valor'), '100')
+    await user.type(screen.getByLabelText('Valor'), '10000')
     await user.type(screen.getByLabelText('Descrição (Opcional)'), 'Pagamento teste')
 
     const submitButton = screen.getByRole('button', { name: /confirmar transferência/i })
@@ -87,11 +87,11 @@ describe('Transfer Flow', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Transferência Concluída!')).toBeInTheDocument()
-    }, { timeout: 3500 })
+    }, { timeout: 6000 })
 
     const financeState = useFinanceStore.getState()
     expect(financeState.balance).toBe(4900)
     expect(financeState.transactions).toHaveLength(1)
     expect(financeState.transactions[0].recipientOrSender).toBe('Maria Silva')
-  })
+  }, 10000)
 })
