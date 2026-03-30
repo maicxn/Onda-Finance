@@ -4,28 +4,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useTransfer, useBalance } from '@/hooks/useQueries'
 import { formatCurrency } from '@/lib/utils'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
-function maskCpf(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 11)
-  if (digits.length <= 3) return digits
-  if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`
-  if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`
-  return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`
-}
+import { maskCpf, maskCurrency, currencyToNumber } from '@/lib/masks'
 
-function maskCurrency(value: string): string {
-  const digits = value.replace(/\D/g, '')
-  if (!digits) return ''
-  const num = parseInt(digits, 10)
-  return (num / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}
-
-function currencyToNumber(masked: string): number {
-  if (!masked) return 0
-  const cleaned = masked.replace(/\./g, '').replace(',', '.')
-  return parseFloat(cleaned) || 0
-}
-import { isValidCpf } from '@/lib/validators'
 import {
   Send,
   CheckCircle,
@@ -40,24 +28,22 @@ const transferSchema = z.object({
   recipientName: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
   recipientCpf: z
     .string()
-    .min(11, 'CPF deve ter 11 dígitos')
+    .min(14, 'CPF deve ter 11 dígitos')
     .max(14, 'CPF inválido')
-    .regex(/^[\d.\-]+$/, 'Formato de CPF inválido')
-    .refine(isValidCpf, 'CPF inválido — dígitos verificadores incorretos'),
+    .regex(/^[\d.\-]+$/, 'Formato de CPF inválido'),
+  recipientBank: z.string().min(1, 'Selecione um banco'),
   amount: z.number().positive('Valor deve ser maior que zero'),
   description: z.string().default(''),
 })
 
-type TransferForm = z.input<typeof transferSchema>
+import { TransferReceipt } from '@/components/transfer/TransferReceipt'
+import { RECENT_RECIPIENTS, BANKS } from '@/constants/mocks'
 
-const recentRecipients = [
-  { name: 'Maria da Silva', cpf: '529.982.247-25' },
-  { name: 'José Santos', cpf: '276.154.380-06' },
-  { name: 'Ana Oliveira', cpf: '831.674.520-87' },
-]
+export type TransferForm = z.input<typeof transferSchema>
 
 export default function Transfer() {
   const [showSuccess, setShowSuccess] = useState(false)
+  const [isAnimatingSuccess, setIsAnimatingSuccess] = useState(false)
   const [lastTransfer, setLastTransfer] = useState<TransferForm | null>(null)
   const [cardFlipped, setCardFlipped] = useState(false)
   const transferMutation = useTransfer()
@@ -73,11 +59,12 @@ export default function Transfer() {
     formState: { errors },
   } = useForm<TransferForm>({
     resolver: zodResolver(transferSchema),
-    defaultValues: { recipientName: '', recipientCpf: '', amount: 0, description: '' },
+    defaultValues: { recipientName: '', recipientCpf: '', recipientBank: '', amount: 0, description: '' },
   })
 
   const watchedAmount = watch('amount') || 0
   const balanceAfter = (balance ?? 0) - (watchedAmount > 0 ? watchedAmount : 0)
+  const isAmountExceeded = balance !== undefined && watchedAmount > balance
 
   const onSubmit = (data: TransferForm) => {
     if (balance !== undefined && data.amount > balance) return
@@ -92,48 +79,41 @@ export default function Transfer() {
       {
         onSuccess: () => {
           setLastTransfer(data)
-          setShowSuccess(true)
-          reset()
+          setIsAnimatingSuccess(true)
+          setTimeout(() => {
+            setIsAnimatingSuccess(false)
+            setShowSuccess(true)
+            reset()
+          }, 2500)
         },
       }
     )
   }
 
+  if (isAnimatingSuccess) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] animate-fade-in">
+        <div className="relative flex items-center justify-center w-32 h-32 mb-8">
+          <div className="absolute inset-0 rounded-full border-4 border-brand/20 animate-ping" style={{ animationDuration: '2s' }} />
+          <div className="absolute inset-0 rounded-full border-4 border-brand/40 animate-pulse" />
+          <div className="relative bg-gradient-to-tr from-brand-dark to-brand rounded-full w-24 h-24 flex items-center justify-center shadow-xl shadow-brand/30 animate-bounce" style={{ animationDuration: '2s' }}>
+            <CheckCircle className="w-12 h-12 text-white animate-fade-in" />
+          </div>
+        </div>
+        <h2 className="text-xl font-bold text-heading animate-pulse">Processando transferência...</h2>
+      </div>
+    )
+  }
+
   if (showSuccess && lastTransfer) {
     return (
-      <div className="max-w-lg mx-auto animate-fade-in">
-        <div className="bg-surface rounded-2xl border border-border p-8 text-center shadow-lg">
-          <div className="w-20 h-20 bg-success-light rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="w-10 h-10 text-success" />
-          </div>
-          <h2 className="text-2xl font-bold text-heading">Transferência realizada!</h2>
-          <p className="text-muted mt-2 text-sm">
-            Você enviou <strong className="text-success">{formatCurrency(lastTransfer.amount)}</strong>{' '}
-            para <strong className="text-heading">{lastTransfer.recipientName}</strong>
-          </p>
-
-          <div className="bg-background rounded-xl p-4 mt-6 text-left space-y-3">
-            {[
-              ['Destinatário', lastTransfer.recipientName],
-              ['CPF', lastTransfer.recipientCpf],
-              ['Valor', formatCurrency(lastTransfer.amount)],
-              ...(lastTransfer.description ? [['Descrição', lastTransfer.description]] : []),
-            ].map(([label, value]) => (
-              <div key={label} className="flex justify-between text-sm">
-                <span className="text-muted">{label}</span>
-                <span className="font-medium text-heading">{value}</span>
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={() => { setShowSuccess(false); setLastTransfer(null) }}
-            className="mt-6 w-full h-12 bg-navy text-white font-semibold rounded-lg hover:bg-navy-light transition-colors cursor-pointer"
-          >
-            Nova transferência
-          </button>
-        </div>
-      </div>
+      <TransferReceipt 
+        lastTransfer={lastTransfer} 
+        onReset={() => {
+          setShowSuccess(false)
+          setLastTransfer(null)
+        }} 
+      />
     )
   }
 
@@ -197,12 +177,33 @@ export default function Transfer() {
                 {errors.recipientCpf && <p className="text-xs text-danger mt-1.5">{errors.recipientCpf.message}</p>}
               </div>
 
-              <div className="flex gap-2 mt-2 flex-wrap">
-                {recentRecipients.map((r) => (
+              <div className="mt-3">
+                <Controller
+                  name="recipientBank"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full h-11 border border-border">
+                        <SelectValue placeholder="Selecione o banco de destino" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {BANKS.map(bank => (
+                          <SelectItem key={bank} value={bank}>{bank}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.recipientBank && <p className="text-xs text-danger mt-1.5">{errors.recipientBank.message}</p>}
+              </div>
+
+              <div className="flex items-center gap-2 mt-3 flex-wrap">
+                <span className="text-[10px] font-semibold text-muted uppercase tracking-wider">Recentes:</span>
+                {RECENT_RECIPIENTS.map((r) => (
                   <button
                     key={r.cpf}
                     type="button"
-                    onClick={() => { setValue('recipientName', r.name); setValue('recipientCpf', r.cpf) }}
+                    onClick={() => { setValue('recipientName', r.name); setValue('recipientCpf', r.cpf); setValue('recipientBank', r.bank) }}
                     className="badge badge-transfer text-[10px] hover:opacity-80 transition-opacity cursor-pointer"
                   >
                     {r.name.split(' ')[0]}
@@ -233,7 +234,8 @@ export default function Transfer() {
                   )}
                 />
               </div>
-              {errors.amount && <p className="text-xs text-danger mt-1.5">{errors.amount.message}</p>}
+              {errors.amount && !isAmountExceeded && <p className="text-xs text-danger mt-1.5">{errors.amount.message}</p>}
+              {isAmountExceeded && <p className="text-xs text-danger mt-1.5">Saldo insuficiente para o valor informado</p>}
             </div>
 
             <div>
@@ -256,8 +258,8 @@ export default function Transfer() {
 
             <button
               type="submit"
-              disabled={transferMutation.isPending}
-              className="w-full h-12 bg-navy text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-navy-light transition-colors disabled:opacity-60 shadow-lg shadow-navy/20 cursor-pointer"
+              disabled={transferMutation.isPending || isAmountExceeded}
+              className="w-full h-12 bg-brand text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand/30 cursor-pointer"
             >
               {transferMutation.isPending ? (
                 <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
@@ -323,7 +325,7 @@ export default function Transfer() {
             <div className="flip-card-inner">
               {/* Front */}
               <div className="flip-card-front bg-gradient-to-r from-brand to-brand-light rounded-xl p-5 text-white relative overflow-hidden">
-                <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+                <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-[10px] uppercase tracking-widest text-white/70">Titular</p>
                   <svg width="32" height="20" viewBox="0 0 32 20" fill="none">

@@ -1,42 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand teal / cyan */
-  --color-brand: #0891b2;
-  --color-brand-dark: #0e7490;
-  --color-brand-light: #22d3ee;
-  --color-brand-50: #ecfeff;
-  --color-brand-100: #cffafe;
+  /* Primary — dark emerald green */
+  --color-brand: #064e3b;
+  --color-brand-dark: #053f30;
+  --color-brand-light: #10b981;
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
 
-  /* Navy / sidebar */
-  --color-navy: #0f172a;
-  --color-navy-light: #1e293b;
-  --color-navy-600: #334155;
+  /* Secondary — dark navy */
+  --color-navy: #1e293b;
+  --color-navy-light: #334155;
+  --color-navy-600: #475569;
 
-  /* Backgrounds */
-  --color-background: #f0f4f8;
+  /* Tertiary — brown / terracotta */
+  --color-tertiary: #6b342d;
+  --color-tertiary-light: #a0524a;
+
+  /* Neutral / Backgrounds */
+  --color-background: #fdfcf7;
   --color-surface: #ffffff;
-  --color-surface-hover: #f8fafc;
+  --color-surface-hover: #f8f7f2;
 
   /* Borders */
-  --color-border: #e2e8f0;
-  --color-border-hover: #cbd5e1;
+  --color-border: #e5e2d9;
+  --color-border-hover: #d4d0c5;
 
   /* Text */
-  --color-heading: #0f172a;
+  --color-heading: #1e293b;
   --color-body: #475569;
   --color-muted: #94a3b8;
 
   /* Semantic */
   --color-success: #10b981;
   --color-success-light: #d1fae5;
-  --color-danger: #ef4444;
+  --color-danger: #b91c1c;
   --color-danger-light: #fee2e2;
   --color-warning: #f59e0b;
 
   /* Gradient */
-  --color-gradient-start: #0f172a;
-  --color-gradient-end: #1e3a5f;
+  --color-gradient-start: #064e3b;
+  --color-gradient-end: #002117;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -100,6 +104,20 @@ body {
 .animate-slide-up {
   animation: slideUp 0.4s ease-out;
 }
+
+@keyframes wave-parallax {
+  0% { transform: translate3d(-90px, 0, 0); }
+  100% { transform: translate3d(85px, 0, 0); }
+}
+
+.animate-wave-parallax > use {
+  animation: wave-parallax 25s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.animate-wave-parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+.animate-wave-parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
+.animate-wave-parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
+.animate-wave-parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
 
 /* Badge */
 .badge {

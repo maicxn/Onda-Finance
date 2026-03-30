@@ -34,8 +34,23 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-gradient-to-br from-brand-50 via-white to-brand-100">
-      <div className="text-center mb-8 animate-fade-in">
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 bg-gradient-to-br from-brand-50 via-white to-brand-100 overflow-hidden">
+      {/* Animated Background Waves */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0 pointer-events-none">
+        <svg className="relative block w-full h-[20vh] md:h-[25vh] min-w-[800px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">
+          <defs>
+            <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+          </defs>
+          <g className="animate-wave-parallax">
+            <use href="#gentle-wave" x="48" y="0" fill="currentColor" className="text-brand/5" />
+            <use href="#gentle-wave" x="48" y="3" fill="currentColor" className="text-brand/10" />
+            <use href="#gentle-wave" x="48" y="5" fill="currentColor" className="text-brand/15" />
+            <use href="#gentle-wave" x="48" y="7" fill="currentColor" className="text-brand/20" />
+          </g>
+        </svg>
+      </div>
+
+      <div className="relative z-10 text-center mb-8 animate-fade-in">
         <div className="flex items-center justify-center gap-3 mb-2">
           <div className="w-10 h-10 bg-brand rounded-lg flex items-center justify-center">
             <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2.2">
@@ -48,7 +63,7 @@ export default function Login() {
         <p className="text-muted text-sm tracking-wide">Banco Digital Institucional</p>
       </div>
 
-      <div className="w-full max-w-md bg-surface rounded-2xl shadow-xl shadow-black/5 border border-border p-8 animate-slide-up">
+      <div className="relative z-10 w-full max-w-md bg-surface rounded-2xl shadow-xl shadow-brand/5 border border-border p-8 animate-slide-up">
         <h2 className="text-xl font-bold text-heading mb-1">Bem-vindo de volta</h2>
         <p className="text-sm text-muted mb-6">Entre com suas credenciais para acessar sua conta.</p>
 

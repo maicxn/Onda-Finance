@@ -40,6 +40,7 @@ describe('Transfer Flow', () => {
     expect(screen.getByText('Nova Transferência')).toBeInTheDocument()
     expect(screen.getByLabelText('Nome do destinatário')).toBeInTheDocument()
     expect(screen.getByLabelText('CPF do destinatário')).toBeInTheDocument()
+    expect(screen.getByText('Selecione o banco de destino')).toBeInTheDocument()
     expect(screen.getByLabelText('Valor (R$)')).toBeInTheDocument()
   })
 
@@ -69,8 +70,15 @@ describe('Transfer Flow', () => {
     const user = userEvent.setup()
     renderWithProviders(<Transfer />)
 
+    // Fill basic fields
     await user.type(screen.getByLabelText('Nome do destinatário'), 'Maria Silva')
     await user.type(screen.getByLabelText('CPF do destinatário'), '12345678901')
+
+    // Select bank
+    await user.click(screen.getByRole('combobox'))
+    await waitFor(() => expect(screen.getByText('Nubank')).toBeInTheDocument())
+    await user.click(screen.getByText('Nubank'))
+
     await user.type(screen.getByLabelText('Valor (R$)'), '100')
     await user.type(screen.getByLabelText('Descrição (opcional)'), 'Pagamento teste')
 

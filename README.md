@@ -11,7 +11,7 @@ Aplicação web de simulação bancária construída como desafio front-end para
 
 ## 🔗 Link de Acesso
 
-> **[https://onda-finance.vercel.app](https://onda-finance.vercel.app)** *(atualizar após deploy)*
+> **[https://onda-finance-snpo.vercel.app/](https://onda-finance.vercel.app)**
 
 **Credenciais de acesso (mock):**
 - Email: `usuario@onda.com`
@@ -66,8 +66,9 @@ src/
 ├── helpers/           # Helpers reutilizáveis (txIcon, txCategory)
 ├── hooks/             # React Query hooks (useBalance, useTransfer...)
 ├── layouts/           # AppLayout (sidebar responsiva)
-├── lib/               # Utilitários (cn, formatCurrency) e validadores (CPF)
-├── pages/             # Login, Dashboard, Transfer
+├── lib/               # Utilitários (cn, máscaras) e formatadores
+├── pages/             # Login, Dashboard, Transfer, Cards
+├── routes/            # Configuração centralizada de rotas (AppRoutes)
 ├── services/          # Mock API com Axios
 ├── stores/            # Zustand stores (auth, finance)
 ├── test/              # Setup e testes
@@ -80,7 +81,9 @@ src/
 
 - **Design responsivo**: Sidebar recolhível em mobile com overlay, layout adaptivo em todas as telas.
 
-- **Animação de cartão 3D**: Flip card com CSS `perspective` e `transform: rotateY()` mostrando frente e verso do cartão.
+- **Animação de cartão 3D**: Flip card com CSS `perspective` e `transform: rotateY()` mostrando frente e verso para os cartões físico e virtual na nova tela de Cartões.
+
+- **Comprovantes em PDF**: Geração de comprovante client-side na finalização de transferências utilizando `html-to-image` e `jspdf`, com suporte pleno aos tokens CSS oklch do Tailwind v4.
 
 - **Transações em tempo real**: Cada transferência atualiza imediatamente a tabela de transações e o saldo via `refetchQueries` do React Query.
 
@@ -120,16 +123,17 @@ Em uma aplicação de produção, as seguintes medidas seriam implementadas:
 
 ## 🔮 Melhorias Futuras
 
+- [x] Comprovante de transferência em PDF
+- [x] Gerenciamento de cartões virtuais e físicos
+- [x] Extração e centralização de rotas de navegação
 - [ ] API real com autenticação JWT (refresh tokens em HttpOnly cookies)
-- [ ] Histórico de transferências com filtros e paginação
+- [ ] Histórico de transferências com paginação
 - [ ] Notificações em tempo real (WebSocket)
 - [ ] Internacionalização (i18n) com suporte a múltiplos idiomas
-- [ ] Tema claro/escuro customizável
 - [ ] PWA com suporte offline
 - [ ] Gráficos de gastos e receitas (Recharts)
-- [ ] Comprovante de transferência em PDF
-- [ ] Autenticação biométrica (WebAuthn)
-- [ ] CI/CD com GitHub Actions + deploy automático
+- [x] Autenticação biométrica (WebAuthn)
+- [x] CI/CD com GitHub Actions + deploy automático para GitHub Pages
 - [ ] Testes E2E com Playwright
 
 ---

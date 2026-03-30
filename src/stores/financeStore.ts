@@ -74,8 +74,10 @@ const INITIAL_BALANCE = 5982.78
 interface FinanceState {
   balance: number
   transactions: Transaction[]
+  isBalanceVisible: boolean
   deductBalance: (amount: number) => void
   addTransaction: (transaction: Transaction) => void
+  toggleBalanceVisibility: () => void
   reset: () => void
 }
 
@@ -84,17 +86,29 @@ export const useFinanceStore = create<FinanceState>()(
     (set) => ({
       balance: INITIAL_BALANCE,
       transactions: INITIAL_TRANSACTIONS,
+      isBalanceVisible: true,
       deductBalance: (amount) =>
         set((state) => ({ balance: state.balance - amount })),
       addTransaction: (transaction) =>
         set((state) => ({
           transactions: [transaction, ...state.transactions],
         })),
+      toggleBalanceVisibility: () =>
+        set((state) => ({ isBalanceVisible: !state.isBalanceVisible })),
       reset: () =>
-        set({ balance: INITIAL_BALANCE, transactions: INITIAL_TRANSACTIONS }),
+        set({
+          balance: INITIAL_BALANCE,
+          transactions: INITIAL_TRANSACTIONS,
+          isBalanceVisible: true,
+        }),
     }),
     {
       name: 'onda-finance',
+      partialize: (state) => ({
+        balance: state.balance,
+        transactions: state.transactions,
+        isBalanceVisible: state.isBalanceVisible,
+      }),
     }
   )
 )

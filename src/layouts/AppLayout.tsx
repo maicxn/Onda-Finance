@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/transfer', label: 'Transferências', icon: ArrowLeftRight },
-  { to: '#', label: 'Cartões', icon: CreditCard },
+  { to: '/cards', label: 'Cartões', icon: CreditCard },
   { to: '#', label: 'Configurações', icon: Settings },
 ]
 
@@ -28,19 +28,16 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen flex bg-background">
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* ── Sidebar ── */}
       <aside
         className={cn(
           'fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50 w-56 h-screen bg-white flex flex-col transition-transform duration-300 overflow-y-auto shrink-0',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
-        {/* Brand */}
         <div className="px-5 pt-7 pb-6">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-brand rounded-md flex items-center justify-center">
@@ -56,7 +53,6 @@ export default function AppLayout() {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 px-3 space-y-1.5 mt-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.to
@@ -81,7 +77,6 @@ export default function AppLayout() {
           })}
         </nav>
 
-        {/* Bottom actions */}
         <div className="px-3 pb-5 space-y-2">
           <button
             onClick={() => navigate('/transfer')}
@@ -102,11 +97,8 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      {/* ── Main Area ── */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Bar */}
         <header className="h-14 bg-surface border-b border-border flex items-center justify-between px-4 lg:px-6 shrink-0">
-          {/* Left: hamburger */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -123,7 +115,6 @@ export default function AppLayout() {
             </div>
           </div>
 
-          {/* Right: icons + user */}
           <div className="flex items-center gap-3">
             <button className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-background transition-colors relative cursor-pointer">
               <Bell className="w-[18px] h-[18px] text-muted" />
@@ -145,7 +136,6 @@ export default function AppLayout() {
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="flex-1 p-4 lg:p-6 overflow-y-auto">
           <div className="max-w-6xl mx-auto">
             <Outlet />
