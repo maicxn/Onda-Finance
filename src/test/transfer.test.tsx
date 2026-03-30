@@ -37,18 +37,18 @@ describe('Transfer Flow', () => {
   it('should render the transfer form', () => {
     renderWithProviders(<Transfer />)
 
-    expect(screen.getByText('Nova Transferência')).toBeInTheDocument()
-    expect(screen.getByLabelText('Nome do destinatário')).toBeInTheDocument()
-    expect(screen.getByLabelText('CPF do destinatário')).toBeInTheDocument()
+    expect(screen.getByText('Enviar Dinheiro')).toBeInTheDocument()
+    expect(screen.getByLabelText('Destinatário')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('000.000.000-00')).toBeInTheDocument()
     expect(screen.getByText('Selecione o banco de destino')).toBeInTheDocument()
-    expect(screen.getByLabelText('Valor (R$)')).toBeInTheDocument()
+    expect(screen.getByLabelText('Valor')).toBeInTheDocument()
   })
 
   it('should show validation errors for empty fields', async () => {
     const user = userEvent.setup()
     renderWithProviders(<Transfer />)
 
-    const submitButton = screen.getByRole('button', { name: /transferir/i })
+    const submitButton = screen.getByRole('button', { name: /confirmar transferência/i })
     await user.click(submitButton)
 
     await waitFor(() => {
@@ -71,23 +71,23 @@ describe('Transfer Flow', () => {
     renderWithProviders(<Transfer />)
 
     // Fill basic fields
-    await user.type(screen.getByLabelText('Nome do destinatário'), 'Maria Silva')
-    await user.type(screen.getByLabelText('CPF do destinatário'), '12345678901')
+    await user.type(screen.getByLabelText('Destinatário'), 'Maria Silva')
+    await user.type(screen.getByPlaceholderText('000.000.000-00'), '12345678901')
 
     // Select bank
     await user.click(screen.getByRole('combobox'))
     await waitFor(() => expect(screen.getByText('Nubank')).toBeInTheDocument())
     await user.click(screen.getByText('Nubank'))
 
-    await user.type(screen.getByLabelText('Valor (R$)'), '100')
-    await user.type(screen.getByLabelText('Descrição (opcional)'), 'Pagamento teste')
+    await user.type(screen.getByLabelText('Valor'), '100')
+    await user.type(screen.getByLabelText('Descrição (Opcional)'), 'Pagamento teste')
 
-    const submitButton = screen.getByRole('button', { name: /transferir/i })
+    const submitButton = screen.getByRole('button', { name: /confirmar transferência/i })
     await user.click(submitButton)
 
     await waitFor(() => {
-      expect(screen.getByText('Transferência realizada!')).toBeInTheDocument()
-    }, { timeout: 3000 })
+      expect(screen.getByText('Transferência Concluída!')).toBeInTheDocument()
+    }, { timeout: 3500 })
 
     const financeState = useFinanceStore.getState()
     expect(financeState.balance).toBe(4900)
