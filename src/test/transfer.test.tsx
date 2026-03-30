@@ -76,8 +76,8 @@ describe('Transfer Flow', () => {
 
     // Select bank
     await user.click(screen.getByRole('combobox'))
-    await waitFor(() => expect(screen.getByText('Nubank')).toBeInTheDocument())
-    await user.click(screen.getByText('Nubank'))
+    const bankOption = await screen.findByRole('option', { name: 'Nubank' })
+    await user.click(bankOption)
 
     await user.type(screen.getByLabelText('Valor'), '10000')
     await user.type(screen.getByLabelText('Descrição (Opcional)'), 'Pagamento teste')
