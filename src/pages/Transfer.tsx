@@ -324,8 +324,9 @@ export default function Transfer() {
           >
             <div className="flip-card-inner">
               {/* Front */}
-              <div className="flip-card-front bg-gradient-to-r from-brand to-brand-light rounded-xl p-5 text-white relative overflow-hidden">
-                <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="flip-card-front bg-gradient-to-br from-brand to-brand-dark rounded-xl p-5 text-white relative overflow-hidden shadow-lg shadow-brand/20">
+                <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-[10px] uppercase tracking-widest text-white/70">Titular</p>
                   <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
@@ -344,7 +345,7 @@ export default function Transfer() {
               </div>
 
               {/* Back */}
-              <div className="flip-card-back bg-gradient-to-r from-brand-dark to-brand rounded-xl text-white relative overflow-hidden">
+              <div className="flip-card-back bg-gradient-to-r from-brand-dark to-brand rounded-xl text-white relative overflow-hidden shadow-lg shadow-brand/20">
                 <div className="w-full h-10 bg-black/40 mt-5" />
                 <div className="px-5 mt-4">
                   <div className="flex items-center gap-3">

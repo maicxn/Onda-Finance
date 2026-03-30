@@ -196,29 +196,32 @@ export default function Cards() {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-surface rounded-xl border border-border p-6">
-            <h3 className="text-sm font-bold text-heading uppercase tracking-wider mb-5">Fatura Atual</h3>
+          <div className="bg-gradient-to-br from-brand to-brand-dark rounded-xl p-6 relative overflow-hidden shadow-xl shadow-brand/20">
+            <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
 
-            <div className="mb-6">
-              <p className="text-xs text-muted font-medium mb-1">Fechamento em 24 Out</p>
-              <h4 className="text-3xl font-extrabold text-brand">R$ 1.842,50</h4>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-5 relative z-10">Fatura Atual</h3>
+
+            <div className="mb-6 relative z-10">
+              <p className="text-xs text-white/70 font-medium mb-1">Fechamento em 24 Out</p>
+              <h4 className="text-3xl font-extrabold text-white">R$ 1.842,50</h4>
             </div>
 
-            <div className="space-y-2 mb-6">
+            <div className="space-y-2 mb-6 relative z-10">
               <div className="flex justify-between text-xs font-semibold">
-                <span className="text-muted">Limite Disponível</span>
-                <span className="text-success">R$ 3.157,50</span>
+                <span className="text-white/70">Limite Disponível</span>
+                <span className="text-success-light">R$ 3.157,50</span>
               </div>
-              <div className="w-full h-2 bg-background rounded-full overflow-hidden">
-                <div className="h-full bg-brand rounded-full" style={{ width: '35%' }} />
+              <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                <div className="h-full bg-white rounded-full" style={{ width: '35%' }} />
               </div>
-              <div className="flex justify-between text-xs text-muted">
+              <div className="flex justify-between text-xs text-white/50">
                 <span>R$ 0</span>
                 <span>R$ 5.000 (Total)</span>
               </div>
             </div>
 
-            <button className="w-full py-2.5 bg-brand text-white font-semibold text-sm rounded-lg hover:bg-brand-dark transition-colors shadow-md shadow-brand/20 cursor-pointer">
+            <button className="w-full py-2.5 bg-white text-brand-dark font-bold text-sm rounded-lg hover:bg-white/90 transition-colors shadow-lg cursor-pointer relative z-10">
               Pagar Fatura
             </button>
           </div>
