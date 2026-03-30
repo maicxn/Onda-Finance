@@ -11,7 +11,7 @@ Aplicação web de simulação bancária construída como desafio front-end para
 
 ## 🔗 Link de Acesso
 
-> **[https://onda-finance-snpo.vercel.app/](https://onda-finance.vercel.app)**
+> **[https://onda-finance-snpo.vercel.app/](https://onda-finance-snpo.vercel.app/)**
 
 **Credenciais de acesso (mock):**
 - Email: `usuario@onda.com`
@@ -57,6 +57,7 @@ O projeto roda em `http://localhost:5173` por padrão.
 | **Formulários** | React Hook Form + Zod | Validação schema-first com tipagem inferida; inputs com máscaras (CPF e moeda) |
 | **HTTP** | Axios | Interceptors para auth; configuração centralizada |
 | **Testes** | Vitest + Testing Library | Testes de integração focados no fluxo do usuário |
+| **CI/CD** | GitHub Actions | Automação de testes e deploy; garantia de estabilidade e Node.js 20+ compatibility |
 
 ### Organização de Pastas
 
@@ -150,6 +151,16 @@ O fluxo de transferência é testado com **Vitest + React Testing Library**, cob
 ```bash
 npm test
 ```
+
+---
+
+## ⚙️ CI/CD
+
+O projeto conta com um pipeline de **Integração e Entrega Contínua (CI/CD)** via **GitHub Actions**:
+
+- **Automação de Testes**: A cada push na branch `main`, o pipeline executa automaticamente o conjunto de testes com Vitest, garantindo que novas funcionalidades não quebrem o sistema.
+- **Node.js 20+**: O ambiente de build é configurado com Node.js 20 para suporte pleno às ferramentas modernas de bundling (Vite 6/Rolldown).
+- **Deploy Automático**: Após a validação dos testes, o build de produção é gerado e disponibilizado de forma automatizada.
 
 ---
 
