@@ -126,14 +126,14 @@ Em uma aplicação de produção, as seguintes medidas seriam implementadas:
 - [x] Comprovante de transferência em PDF
 - [x] Gerenciamento de cartões virtuais e físicos
 - [x] Extração e centralização de rotas de navegação
+- [x] CI/CD com GitHub Actions + deploy automático para GitHub Pages
 - [ ] API real com autenticação JWT (refresh tokens em HttpOnly cookies)
 - [ ] Histórico de transferências com paginação
 - [ ] Notificações em tempo real (WebSocket)
 - [ ] Internacionalização (i18n) com suporte a múltiplos idiomas
 - [ ] PWA com suporte offline
 - [ ] Gráficos de gastos e receitas (Recharts)
-- [x] Autenticação biométrica (WebAuthn)
-- [x] CI/CD com GitHub Actions + deploy automático para GitHub Pages
+- [ ] Autenticação biométrica (WebAuthn)
 - [ ] Testes E2E com Playwright
 
 ---
